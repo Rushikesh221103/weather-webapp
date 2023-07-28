@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TASK2</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #222;
+        }
+
+        .main {
+            width: 50%;
+            background: linear-gradient(135deg, #00feba, #5b548a);
+            color: #fff;
+            margin: 100px auto 0;
+            border-radius: 20px;
+            padding: 40px 35px;
+            text-align: center;
+        }
+
+       
+        .weather-icon {
+            width: 170px;
+            margin-top: 2px;
+        }
+
+        .weather h1 {
+            font-size: 45px;
+            font-weight: 500;
+            margin-top: -10px;
+        }
+
+        .details {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            margin-top: 50px;
+        }
+
+        .col {
+            display: flex;
+            align-items: center;
+            text-align: left;
+        }
+
+
+        .humidity,
+        .wind,
+        .pressure,
+        .visibility {
+            font-size: 28px;
+            margin-top: -6px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main">
+        <div class="weather">
+            <div class="top-part">
+                <img src="clouds.png" class="weather-icon" alt="Weather Icon">
+                <div class="name-temp">
+                    <h1 class="temp">20°C</h1>
+                    <h2 class="city">NEW YORK</h2>
+                </div>
+            </div>
+
+            <div class="details">
+                <div class="col">
+                    <div>
+                        <p class="humidity">100%</p>
+                        <p>Humidity</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div>
+                        <p class="wind">100 Km/h</p>
+                        <p>Wind Speed</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div>
+                        <p class="pressure">1000 mPa</p>
+                        <p>Pressure</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div>
+                        <p class="visibility">1000 mPa</p>
+                        <p>Visibility</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    navigator.geolocation.getCurrentPosition((position) => {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+
+    const apikey = "7c58feddaa50d3adcac148f903e657c1";
+    const apiurl = `https://api.openweathermap.org/data/2.5/weather?&units=metric&lat=${lat}&lon=${lon}&appid=${apikey}`;
+
+    const weatherIcon =  document.querySelector(".weather-icon")
+    
+    const checkweather = async () => {
+        const response = await fetch(apiurl);
+        const data = await response.json();
+        console.log(data);
+
+        document.querySelector(".city").innerHTML = data.name;
+        document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
+        document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+        document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
+        document.querySelector(".pressure").innerHTML = data.main.pressure + " mPa";
+        document.querySelector(".visibility").innerHTML = data.visibility + " m";
+
+        if(data.weather[0].main == "Clouds"){
+            weatherIcon.src = "clouds.png";
+        }else if(data.weather[0].main == "Clear"){
+            weatherIcon.src = "clear.png";
+        }else if(data.weather[0].main == "Rain"){
+            weatherIcon.src = "rain.png";
+        }else if(data.weather[0].main == "Drizzle"){
+            weatherIcon.src = "drizzle.png";
+        }else if(data.weather[0].main == "Mist"){
+            weatherIcon.src = "mist.png";
+        }
+
+
+    
+
+
+
+    };
+    checkweather();
+});
+
+     </script>
+
+
+</body>
+
+</html>
